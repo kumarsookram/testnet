@@ -1,4 +1,4 @@
-FROM ethereum/client-go:v1.10.1
+FROM ethereum/client-go:v1.10.1 as geth-client
 
 ARG ACCOUNT_PASSWORD
 
