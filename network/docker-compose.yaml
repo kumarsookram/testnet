@@ -1,10 +1,10 @@
-version: '3.7'
+version: '3.8'
 
 services:
   geth-bootnode:
     hostname: geth-bootnode
     env_file:
-      - ./ethereum/.env
+      - .env
     image: geth-client
     build:
       context: ./ethereum
@@ -22,7 +22,7 @@ services:
   geth-rpc-endpoint:
     hostname: geth-rpc-endpoint
     env_file:
-      - ./ethereum/.env
+      - .env
     image: geth-client
     depends_on:
       - geth-bootnode    
@@ -47,7 +47,7 @@ services:
   geth-miner:
     hostname: geth-miner
     env_file:
-      - ./ethereum/.env
+      - .env
     image: geth-client
     cpus: 0.5
     depends_on:
@@ -84,6 +84,7 @@ services:
       - postgres
     depends_on: 
       - postgres
+      - geth-client
     networks:
       priv-eth-net:
 
