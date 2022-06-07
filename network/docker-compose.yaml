@@ -4,10 +4,10 @@ services:
   geth-bootnode:
     hostname: geth-bootnode
     env_file:
-      - .env
+      - ./ethereum/.env
     image: geth-client
     build:
-      context: .
+      context: ./ethereum
       args:
         - ACCOUNT_PASSWORD=${ACCOUNT_PASSWORD}
     command:
@@ -22,7 +22,7 @@ services:
   geth-rpc-endpoint:
     hostname: geth-rpc-endpoint
     env_file:
-      - .env
+      - ./ethereum/.env
     image: geth-client
     depends_on:
       - geth-bootnode    
@@ -47,7 +47,7 @@ services:
   geth-miner:
     hostname: geth-miner
     env_file:
-      - .env
+      - ./ethereum/.env
     image: geth-client
     cpus: 0.5
     depends_on:
@@ -58,6 +58,32 @@ services:
       --miner.threads=1
       --networkid=${NETWORK_ID}
       --netrestrict="172.16.254.0/28"
+    networks:
+      priv-eth-net:
+
+  postgres:
+    image: postgres:13.1-alpine
+    ports:
+      - 5432:5432
+    env_file: 
+      - ./chainlink/postgres.env
+    networks:
+            priv-eth-net:
+
+
+
+  chainlink:
+    build: ./chainlink
+    env_file:
+      - ./chainlink/chainlink.env
+    command: local node -p /chainlink/.password -a /chainlink/.api
+    restart: on-failure
+    ports: 
+      - 6688:6688
+    links:
+      - postgres
+    depends_on: 
+      - postgres
     networks:
       priv-eth-net:
 
