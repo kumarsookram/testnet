@@ -39,7 +39,7 @@ services:
       --networkid=${NETWORK_ID}
       --netrestrict="172.16.254.0/28"
     ports:
-      - "8544:8545"
+      - "8545:8545"
       - "8546:8546"
     networks:
       priv-eth-net:
